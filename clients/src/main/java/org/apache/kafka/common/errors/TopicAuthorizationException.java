@@ -19,7 +19,7 @@ package org.apache.kafka.common.errors;
 import java.util.Collections;
 import java.util.Set;
 
-public class TopicAuthorizationException extends AuthorizationException {
+public class TopicAuthorizationException extends InvalidConfigurationException {
     private final Set<String> unauthorizedTopics;
 
     public TopicAuthorizationException(String message, Set<String> unauthorizedTopics) {
