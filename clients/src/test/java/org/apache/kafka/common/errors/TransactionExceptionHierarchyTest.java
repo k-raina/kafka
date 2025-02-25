@@ -18,8 +18,8 @@ package org.apache.kafka.common.errors;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TransactionExceptionHierarchyTest {
 
@@ -48,4 +48,3 @@ public class TransactionExceptionHierarchyTest {
         assertRetriableExceptionInheritance(ConcurrentTransactionsException.class);
     }
 }
-
