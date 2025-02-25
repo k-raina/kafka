@@ -23,6 +23,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TransactionExceptionHierarchyTest {
 
+    @Test
+    void testRetriableExceptionExceptionHierarchy() {
+        assertRetriableExceptionInheritance(TimeoutException.class);
+        assertRetriableExceptionInheritance(NotEnoughReplicasException.class);
+        assertRetriableExceptionInheritance(CoordinatorLoadInProgressException.class);
+        assertRetriableExceptionInheritance(CorruptRecordException.class);
+        assertRetriableExceptionInheritance(NotEnoughReplicasAfterAppendException.class);
+        assertRetriableExceptionInheritance(ConcurrentTransactionsException.class);
+    }
+
     /**
      * Verifies that the given exception class extends `RetriableException`
      * and does **not** extend `RefreshRetriableException`.
@@ -36,15 +46,5 @@ public class TransactionExceptionHierarchyTest {
                 exceptionClass.getSimpleName() + " should extend RetriableException");
         assertFalse(RefreshRetriableException.class.isAssignableFrom(exceptionClass),
                 exceptionClass.getSimpleName() + " should NOT extend RefreshRetriableException");
-    }
-
-    @Test
-    void testRetriableExceptionExceptionHierarchy() {
-        assertRetriableExceptionInheritance(TimeoutException.class);
-        assertRetriableExceptionInheritance(NotEnoughReplicasException.class);
-        assertRetriableExceptionInheritance(CoordinatorLoadInProgressException.class);
-        assertRetriableExceptionInheritance(CorruptRecordException.class);
-        assertRetriableExceptionInheritance(NotEnoughReplicasAfterAppendException.class);
-        assertRetriableExceptionInheritance(ConcurrentTransactionsException.class);
     }
 }
