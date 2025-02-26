@@ -16,21 +16,20 @@
  */
 package org.apache.kafka.common.errors;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TransactionExceptionHierarchyTest {
 
-    @Test
-    void testRetriableExceptionExceptionHierarchy() {
-        assertRetriableExceptionInheritance(TimeoutException.class);
-        assertRetriableExceptionInheritance(NotEnoughReplicasException.class);
-        assertRetriableExceptionInheritance(CoordinatorLoadInProgressException.class);
-        assertRetriableExceptionInheritance(CorruptRecordException.class);
-        assertRetriableExceptionInheritance(NotEnoughReplicasAfterAppendException.class);
-        assertRetriableExceptionInheritance(ConcurrentTransactionsException.class);
+    @ParameterizedTest
+    @MethodSource("retriableExceptionsProvider")
+    void testRetriableExceptionExceptionHierarchy(Class<? extends Exception> exceptionClass) {
+        assertRetriableExceptionInheritance(exceptionClass);
     }
 
     /**
@@ -46,5 +45,16 @@ public class TransactionExceptionHierarchyTest {
                 exceptionClass.getSimpleName() + " should extend RetriableException");
         assertFalse(RefreshRetriableException.class.isAssignableFrom(exceptionClass),
                 exceptionClass.getSimpleName() + " should NOT extend RefreshRetriableException");
+    }
+
+    private static Stream<Class<? extends Exception>> retriableExceptionsProvider() {
+        return Stream.of(
+                TimeoutException.class,
+                NotEnoughReplicasException.class,
+                CoordinatorLoadInProgressException.class,
+                CorruptRecordException.class,
+                NotEnoughReplicasAfterAppendException.class,
+                ConcurrentTransactionsException.class
+        );
     }
 }
