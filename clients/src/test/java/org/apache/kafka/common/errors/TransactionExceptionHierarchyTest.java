@@ -17,44 +17,35 @@
 package org.apache.kafka.common.errors;
 
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
-
-import java.util.stream.Stream;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TransactionExceptionHierarchyTest {
 
-    @ParameterizedTest
-    @MethodSource("retriableExceptionsProvider")
-    void testRetriableExceptionExceptionHierarchy(Class<? extends Exception> exceptionClass) {
-        assertRetriableExceptionInheritance(exceptionClass);
-    }
-
     /**
      * Verifies that the given exception class extends `RetriableException`
      * and does **not** extend `RefreshRetriableException`.
+     *
      * Using `RefreshRetriableException` changes the exception handling behavior,
-     * so only exceptions directly extending `RetriableException` are valid here.
+     * so only exceptions extending `RetriableException` directly are considered valid here.
      *
      * @param exceptionClass the exception class to check
      */
-    private void assertRetriableExceptionInheritance(Class<?> exceptionClass) {
+    @ParameterizedTest
+    @ValueSource(classes = {
+        TimeoutException.class,
+        NotEnoughReplicasException.class,
+        CoordinatorLoadInProgressException.class,
+        CorruptRecordException.class,
+        NotEnoughReplicasAfterAppendException.class,
+        ConcurrentTransactionsException.class
+    })
+    void testRetriableExceptionHierarchy(Class<? extends Exception> exceptionClass) {
         assertTrue(RetriableException.class.isAssignableFrom(exceptionClass),
                 exceptionClass.getSimpleName() + " should extend RetriableException");
         assertFalse(RefreshRetriableException.class.isAssignableFrom(exceptionClass),
                 exceptionClass.getSimpleName() + " should NOT extend RefreshRetriableException");
-    }
-
-    private static Stream<Class<? extends Exception>> retriableExceptionsProvider() {
-        return Stream.of(
-                TimeoutException.class,
-                NotEnoughReplicasException.class,
-                CoordinatorLoadInProgressException.class,
-                CorruptRecordException.class,
-                NotEnoughReplicasAfterAppendException.class,
-                ConcurrentTransactionsException.class
-        );
     }
 }
