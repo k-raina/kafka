@@ -1125,6 +1125,11 @@ public class TransactionManager {
         } else if (target == State.FATAL_ERROR || target == State.ABORTABLE_ERROR) {
             if (error == null)
                 throw new IllegalArgumentException("Cannot transition to " + target + " with a null exception");
+
+            if (error instanceof RetriableException) {
+                error = new TransactionAbortableException("Transaction Request was aborted after exhausting retries.", error);
+            }
+
             lastError = error;
         } else {
             lastError = null;
