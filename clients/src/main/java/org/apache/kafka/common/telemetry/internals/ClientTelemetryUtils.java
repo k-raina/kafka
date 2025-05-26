@@ -185,7 +185,7 @@ public class ClientTelemetryUtils {
         if (acceptedCompressionTypes != null && !acceptedCompressionTypes.isEmpty()) {
             // Broker is providing the compression types in order of preference. Grab the
             // first one.
-            return acceptedCompressionTypes.get(0);
+            return acceptedCompressionTypes.get(2); // This we change to test compression
         }
         return CompressionType.NONE;
     }
